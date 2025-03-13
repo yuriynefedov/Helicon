@@ -10,8 +10,16 @@ let package = Package(
     ],
     products: [
         .library(
-            name: "Helicon",
-            targets: ["HeliconFoundation", "HeliconUI"]
+            name: "HeliconFoundation",
+            targets: ["HeliconFoundation"]
+        ),
+        .library(
+            name: "HeliconUI",
+            targets: ["HeliconUI"]
+        ),
+        .library(
+            name: "HeliconFirebase",
+            targets: ["HeliconFirebase"]
         ),
     ],
     targets: [
@@ -22,5 +30,9 @@ let package = Package(
             name: "HeliconUI",
             dependencies: ["HeliconFoundation"]
         ),
+        .target(
+            name: "HeliconFirebase",
+            dependencies: ["HeliconFoundation"]
+        )
     ]
 )
