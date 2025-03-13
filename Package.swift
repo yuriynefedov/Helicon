@@ -4,21 +4,23 @@
 import PackageDescription
 
 let package = Package(
-    name: "HeliconUI",
+    name: "Helicon",
     platforms: [
         .iOS(.v16)
     ],
     products: [
         .library(
-            name: "HeliconUI",
-            targets: ["HeliconUI"]),
+            name: "Helicon",
+            targets: ["HeliconFoundation", "HeliconUI"]
+        ),
     ],
     targets: [
         .target(
-            name: "HeliconUI"),
-        .testTarget(
-            name: "HeliconUITests",
-            dependencies: ["HeliconUI"]
+            name: "HeliconFoundation"
+        ),
+        .target(
+            name: "HeliconUI",
+            dependencies: ["HeliconFoundation"]
         ),
     ]
 )

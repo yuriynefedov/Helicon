@@ -9,27 +9,32 @@ import SwiftUI
 
 public struct ProgressBlurredViewModifier: ViewModifier {
     let isActive: Bool
-    var showSpinner: Bool = true
+    let showSpinner: Bool
+    
+    private var blurRadius: CGFloat {
+        isActive ? 10 : 0
+    }
     
     public func body(content: Content) -> some View {
-        if isActive {
-            ZStack {
-                content
-                    .blur(radius: 10)
-                if showSpinner {
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                }
-            }
-        } else {
+        ZStack {
             content
+                .blur(radius: blurRadius)
+            if isActive && showSpinner {
+                ProgressView()
+                    .progressViewStyle(.circular)
+            }
         }
     }
 }
 
 public extension View {
     func progressBlurred(_ isActive: Bool = true, showSpinner: Bool = true) -> some View {
-        self.modifier(ProgressBlurredViewModifier(isActive: isActive, showSpinner: showSpinner))
+        self.modifier(
+            ProgressBlurredViewModifier(
+                isActive: isActive,
+                showSpinner: showSpinner
+            )
+        )
     }
 }
 

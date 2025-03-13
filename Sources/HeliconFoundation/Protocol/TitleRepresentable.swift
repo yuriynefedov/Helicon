@@ -6,3 +6,7 @@
 //
 
 import Foundation
+
+protocol TitleRepresentable {
+    var title: String { get }
+}
