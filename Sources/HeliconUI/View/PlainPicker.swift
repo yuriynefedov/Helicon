@@ -14,14 +14,14 @@ public struct PlainPicker<T: Identifiable & Hashable & TitleRepresentable>: View
     let options: [T]
     @Binding var selection: T
     
-    init(title: Title? = nil, stretchToFill: Bool = true, options: [T], selection: Binding<T>) {
+    public init(title: Title? = nil, stretchToFill: Bool = true, options: [T], selection: Binding<T>) {
         self.title = title
         self.stretchToFill = stretchToFill
         self.options = options
         self._selection = selection
     }
     
-    init(title: String, stretchToFill: Bool = true, options: [T], selection: Binding<T>) {
+    public init(title: String, stretchToFill: Bool = true, options: [T], selection: Binding<T>) {
         self.title = .prominent(title)
         self.stretchToFill = stretchToFill
         self.options = options
@@ -43,7 +43,7 @@ public struct PlainPicker<T: Identifiable & Hashable & TitleRepresentable>: View
         )
     }
     
-    enum Title {
+    public enum Title {
         case plain(String)
         case prominent(String)
         
