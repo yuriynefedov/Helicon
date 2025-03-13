@@ -7,11 +7,11 @@
 
 import SwiftUI
 
-struct ProgressBlurredViewModifier: ViewModifier {
+public struct ProgressBlurredViewModifier: ViewModifier {
     let isActive: Bool
     var showSpinner: Bool = true
     
-    func body(content: Content) -> some View {
+    public func body(content: Content) -> some View {
         if isActive {
             ZStack {
                 content
@@ -27,9 +27,9 @@ struct ProgressBlurredViewModifier: ViewModifier {
     }
 }
 
-extension View {
+public extension View {
     func progressBlurred(_ isActive: Bool = true, showSpinner: Bool = true) -> some View {
-        self.modifier(ProgressBlurredViewModifier(isActive: isActive))
+        self.modifier(ProgressBlurredViewModifier(isActive: isActive, showSpinner: showSpinner))
     }
 }
 
