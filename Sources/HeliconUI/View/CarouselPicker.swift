@@ -74,11 +74,23 @@ public struct CarouselPicker<Content: View, Option: CarouselItem>: View {
     }
     
     public struct Configuration {
-        var opacityEffect: CGFloat = 1.0
-        var scaleEffect: CGFloat = .zero
+        var opacityEffect: CGFloat
+        var scaleEffect: CGFloat
         
-        var spacing: CGFloat = .zero
-        var contentInset: UIEdgeInsets = .zero
+        var spacing: CGFloat
+        var contentInset: UIEdgeInsets
+        
+        public init(
+            opacityEffect: CGFloat = 1.0,
+            scaleEffect: CGFloat = .zero,
+            spacing: CGFloat = .zero,
+            contentInset: UIEdgeInsets = .zero
+        ) {
+            self.opacityEffect = opacityEffect
+            self.scaleEffect = scaleEffect
+            self.spacing = spacing
+            self.contentInset = contentInset
+        }
     }
 }
 
