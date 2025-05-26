@@ -9,16 +9,25 @@ import SwiftUI
 
 public typealias CarouselItem = Hashable & Identifiable
 
-public struct CarouselPicker<Content: View, Item: CarouselItem>: View {
-    @Binding var items: [Item]
-    @Binding var selection: Item
+public struct CarouselPicker<Content: View, Option: CarouselItem>: View {
+    @Binding var selection: Option
+    var options: [Option]
     
     var configuration: Configuration
     
-    @ViewBuilder let content: (Item) -> Content
+    @ViewBuilder let content: (Option) -> Content
     
     @State private var contentSize: CGSize = .zero
-    @State private var scrollPosition: Item.ID?
+    @State private var scrollPosition: Option.ID?
+    
+    public init(selection: Binding<Option>, options: [Option], configuration: Configuration, content: @escaping (Option) -> Content) {
+        self.options = options
+        self._selection = selection
+        self.configuration = configuration
+        self.content = content
+        self.contentSize = contentSize
+        self.scrollPosition = scrollPosition
+    }
     
     public var body: some View {
         Color.clear
@@ -29,7 +38,7 @@ public struct CarouselPicker<Content: View, Item: CarouselItem>: View {
                 ScrollViewReader { proxy in
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: configuration.spacing) {
-                            ForEach(items) { item in
+                            ForEach(options) { item in
                                 Rectangle()
                                     .fill(Color.clear)
                                     .frame(width: max(contentSize.width - (configuration.contentInset.left + configuration.contentInset.right), 0), height: max(contentSize.height, 0))
@@ -51,7 +60,7 @@ public struct CarouselPicker<Content: View, Item: CarouselItem>: View {
                     .scrollTargetBehavior(.viewAligned)
                     .scrollPosition(id: $scrollPosition)
                     .onChange(of: scrollPosition) { _, newValue in
-                        if let id = newValue, let foundItem = items.first(where: { $0.id == id }) {
+                        if let id = newValue, let foundItem = options.first(where: { $0.id == id }) {
                             selection = foundItem
                         }
                     }
@@ -75,22 +84,29 @@ public struct CarouselPicker<Content: View, Item: CarouselItem>: View {
 
 
 fileprivate struct CarouselTestView: View {
-    @State var items: [Mock] = Mock.list
+    @State var options: [Mock] = Mock.list
     @State var selectedItem: Mock = Mock.list[0]
     var body: some View {
-        CarouselPicker(items: $items,
-                     selectedItem: $selectedItem,
-                     configuration: .init(
-                        opacityEffect: 0.3,
-                        scaleEffect: 0.7,
-                        spacing: .zero,
-                        contentInset: .init(top: .zero, left: 62.0, bottom: .zero, right: 62.0)
-                     )) { item in
-                         Text("Item \(item.value)")
-                             .frame(width: 250, height: 250)
-                             .background(Color.purple)
-                             .clipShape(RoundedRectangle(cornerRadius: 16.0))
-                     }
+        CarouselPicker(
+            selection: $selectedItem,
+            options: options,
+            configuration: .init(
+                opacityEffect: 0.3,
+                scaleEffect: 0.7,
+                spacing: .zero,
+                contentInset: .init(
+                    top: .zero,
+                    left: 62.0,
+                    bottom: .zero,
+                    right: 62.0
+                )
+            )
+        ) { item in
+            Text("Item \(item.value)")
+                .frame(width: 250, height: 250)
+                .background(Color.purple)
+                .clipShape(RoundedRectangle(cornerRadius: 16.0))
+        }
     }
     
     struct Mock: Identifiable, Hashable {
