@@ -73,7 +73,7 @@ public struct CarouselPicker<Content: View, Option: CarouselItem>: View {
             }
     }
     
-    public struct Configuration {
+    public struct Configuration : Sendable {
         var opacityEffect: CGFloat
         var scaleEffect: CGFloat
         
