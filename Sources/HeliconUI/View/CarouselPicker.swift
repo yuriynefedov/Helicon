@@ -19,7 +19,7 @@ public struct CarouselPicker<Content: View, Option: CarouselItem>: View {
     
     @State private var contentSize: CGSize = .zero
     @State private var scrollPosition: Option.ID?
-    
+    @State private var itemSize: CGSize = .zero
     public init(selection: Binding<Option>, options: [Option], configuration: Configuration, content: @escaping (Option) -> Content) {
         self.options = options
         self._selection = selection
@@ -37,59 +37,41 @@ public struct CarouselPicker<Content: View, Option: CarouselItem>: View {
             .overlay {
                 ScrollViewReader { proxy in
                     ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: configuration.spacing) {
+                        HStack(spacing: contentSize.width / 2 - itemSize.width / 2 - configuration.contentInset) {
                             ForEach(options) { item in
-                                Rectangle()
-                                    .fill(Color.clear)
-                                    .frame(width: max(contentSize.width - (configuration.contentInset.left + configuration.contentInset.right), 0), height: max(contentSize.height, 0))
-                                    .overlay(
-                                        content(item)
-                                            .id(item.id)
-                                    )
+                                content(item)
+                                    .readSize { size in
+                                        itemSize = size
+                                    }
                                     .scrollTransition { content, phase in
-                                        content
-                                            .opacity(phase.isIdentity ? 1 : configuration.opacityEffect)
-                                            .scaleEffect(y: phase.isIdentity ? 1 : configuration.scaleEffect)
+                                        content.opacity(phase.isIdentity ? 1.0: configuration.opacityEffect)
                                     }
                             }
                         }
                         .scrollTargetLayout()
+                        .scrollIndicators(.never)
                     }
-                    .contentMargins(.leading, configuration.contentInset.left, for: .scrollContent)
-                    .contentMargins(.trailing, configuration.contentInset.right, for: .scrollContent)
-                    .scrollTargetBehavior(.viewAligned)
-                    .scrollPosition(id: $scrollPosition)
-                    .onChange(of: scrollPosition) { _, newValue in
-                        if let id = newValue, let foundItem = options.first(where: { $0.id == id }) {
-                            selection = foundItem
-                        }
-                    }
-                    .onAppear {
-                        withAnimation(.easeInOut) {
-                            proxy.scrollTo(selection.id, anchor: .center)
-                        }
-                    }
+                    .contentMargins(.leading, contentSize.width / 2 - (itemSize.width / 2), for: .scrollContent)
+                    .contentMargins(.trailing, contentSize.width / 2 - (itemSize.width / 2), for: .scrollContent)
                 }
+                .scrollTargetBehavior(.viewAligned)
             }
     }
     
     public struct Configuration : Sendable {
         var opacityEffect: CGFloat
-        var scaleEffect: CGFloat
-        
-        var spacing: CGFloat
-        var contentInset: UIEdgeInsets
+        var contentInset: CGFloat
         
         public init(
             opacityEffect: CGFloat = 1.0,
-            scaleEffect: CGFloat = .zero,
-            spacing: CGFloat = .zero,
-            contentInset: UIEdgeInsets = .zero
+            contentInset: CGFloat = .zero
         ) {
             self.opacityEffect = opacityEffect
-            self.scaleEffect = scaleEffect
-            self.spacing = spacing
             self.contentInset = contentInset
+        }
+        
+        static var `default`: Self {
+            .init(opacityEffect: 0.7, contentInset: 8.0)
         }
     }
 }
@@ -99,26 +81,24 @@ fileprivate struct CarouselTestView: View {
     @State var options: [Mock] = Mock.list
     @State var selectedItem: Mock = Mock.list[0]
     var body: some View {
-        CarouselPicker(
-            selection: $selectedItem,
-            options: options,
-            configuration: .init(
-                opacityEffect: 0.3,
-                scaleEffect: 0.7,
-                spacing: .zero,
-                contentInset: .init(
-                    top: .zero,
-                    left: 62.0,
-                    bottom: .zero,
-                    right: 62.0
-                )
-            )
-        ) { item in
-            Text("Item \(item.value)")
-                .frame(width: 250, height: 250)
-                .background(Color.purple)
-                .clipShape(RoundedRectangle(cornerRadius: 16.0))
+        ZStack {
+            CarouselPicker(
+                selection: $selectedItem,
+                options: options,
+                configuration: .default
+            ) { item in
+                RoundedRectangle(cornerRadius: 16.0)
+                    .fill(Color.purple)
+                    .frame(width: 250.0, height: 250.0)
+                    .overlay {
+                        Text("WWW")
+                    }
+            }
+            Rectangle()
+                .fill(Color.black)
+                .frame(width: 1)
         }
+        
     }
     
     struct Mock: Identifiable, Hashable {
