@@ -43,6 +43,7 @@ public struct CarouselPicker<Content: View, Option: CarouselItem>: View {
                                     .readSize { size in
                                         itemSize = size
                                     }
+                                    .id(item.id)
                                     .scrollTransition { content, phase in
                                         content.opacity(phase.isIdentity ? 1.0: configuration.opacityEffect)
                                     }
@@ -53,6 +54,17 @@ public struct CarouselPicker<Content: View, Option: CarouselItem>: View {
                     }
                     .contentMargins(.leading, contentSize.width / 2 - (itemSize.width / 2), for: .scrollContent)
                     .contentMargins(.trailing, contentSize.width / 2 - (itemSize.width / 2), for: .scrollContent)
+                    .scrollPosition(id: $scrollPosition)
+                    .onChange(of: scrollPosition) { _, newValue in
+                        if let id = newValue, let foundItem = options.first(where: { $0.id == id }) {
+                            selection = foundItem
+                        }
+                    }
+                    .onAppear {
+                        withAnimation(.easeInOut) {
+                            proxy.scrollTo(selection.id, anchor: .center)
+                        }
+                    }
                 }
                 .scrollTargetBehavior(.viewAligned)
             }
@@ -79,7 +91,7 @@ public struct CarouselPicker<Content: View, Option: CarouselItem>: View {
 
 fileprivate struct CarouselTestView: View {
     @State var options: [Mock] = Mock.list
-    @State var selectedItem: Mock = Mock.list[0]
+    @State var selectedItem: Mock = Mock.list[2]
     var body: some View {
         ZStack {
             CarouselPicker(
