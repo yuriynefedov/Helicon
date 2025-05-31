@@ -28,7 +28,10 @@ let package = Package(
         ),
         .target(
             name: "HeliconUI",
-            dependencies: ["HeliconFoundation"]
+            dependencies: ["HeliconFoundation"],
+            resources: [
+                .process("Assets.xcassets")
+            ]
         ),
         .target(
             name: "HeliconFirebase",

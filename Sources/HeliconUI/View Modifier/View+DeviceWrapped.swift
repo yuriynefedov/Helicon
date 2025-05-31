@@ -38,7 +38,7 @@ struct DeviceFrame<Content: View>: View {
     }
     
     private var deviceFrame: some View {
-        Image("Frame.iPhone16Pro.DesertTitanium")
+        Image.package(named: "Frame.iPhone16Pro.DesertTitanium")
             .resizable()
             .scaledToFit()
     }
