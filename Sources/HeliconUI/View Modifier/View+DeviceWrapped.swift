@@ -44,11 +44,18 @@ struct DeviceFrame<Content: View>: View {
     }
 }
 
+struct DeviceWrappedModifier: ViewModifier {
+    
+    func body(content: Content) -> some View {
+        DeviceFrame {
+            content
+        }
+    }
+}
+
 public extension View {
     func deviceWrapped() -> some View {
-        DeviceFrame {
-            self.body
-        }
+        self.modifier(DeviceWrappedModifier())
     }
 }
 
