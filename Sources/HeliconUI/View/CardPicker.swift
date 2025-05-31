@@ -14,21 +14,55 @@ public struct CardPicker<Content: View, T: Identifiable & Equatable & TitleRepre
     var direction: CardPickerStackDirection = .default
     let options: [T]
     
-    var spacing: CGFloat = 16
-    var strokeWidth: CGFloat = 3
-    var innerPadding: CGFloat = 6
-    var cornerRadius: CGFloat = 20
-    var applyScaleEffect: Bool = true
-    var applyOpacityEffect: Bool = true
-    var font: Font = .subheadline
-    var fontWeight: Font.Weight = .medium
-    var selectedFontWeight: Font.Weight = .medium
-    var labelPadding: CGFloat = 12
+    var spacing: CGFloat
+    var strokeWidth: CGFloat
+    var innerPadding: CGFloat
+    var cornerRadius: CGFloat
+    var applyScaleEffect: Bool
+    var applyOpacityEffect: Bool
+    var font: Font
+    var fontWeight: Font.Weight
+    var selectedFontWeight: Font.Weight
+    var labelPadding: CGFloat
     
     let content: (T) -> Content
-    var onDoubleSelect: (() -> Void)? = nil
+    var onDoubleSelect: (() -> Void)?
     
     var innerCornerRadiusDecrement: CGFloat { innerPadding / 2 }
+    
+    public init(
+        selection: Binding<T>,
+        direction: CardPickerStackDirection,
+        options: [T],
+        spacing: CGFloat = 16,
+        strokeWidth: CGFloat = 3,
+        innerPadding: CGFloat = 6,
+        cornerRadius: CGFloat = 20,
+        applyScaleEffect: Bool = true,
+        applyOpacityEffect: Bool = true,
+        font: Font = .subheadline,
+        fontWeight: Font.Weight = .medium,
+        selectedFontWeight: Font.Weight = .medium,
+        labelPadding: CGFloat = 12,
+        content: @escaping (T) -> Content,
+        onDoubleSelect: (() -> Void)? = nil
+    ) {
+        self._selection = selection
+        self.direction = direction
+        self.options = options
+        self.spacing = spacing
+        self.strokeWidth = strokeWidth
+        self.innerPadding = innerPadding
+        self.cornerRadius = cornerRadius
+        self.applyScaleEffect = applyScaleEffect
+        self.applyOpacityEffect = applyOpacityEffect
+        self.font = font
+        self.fontWeight = fontWeight
+        self.selectedFontWeight = selectedFontWeight
+        self.labelPadding = labelPadding
+        self.content = content
+        self.onDoubleSelect = onDoubleSelect
+    }
     
     public var body: some View {
         picker
