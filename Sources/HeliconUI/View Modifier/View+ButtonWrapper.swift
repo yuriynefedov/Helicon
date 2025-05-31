@@ -18,7 +18,7 @@ struct ButtonWrapperModifier: ViewModifier {
     }
 }
 
-extension View {
+public extension View {
     
     func buttonWrapper(action: @escaping (() -> Void)) -> some View {
         self.modifier(ButtonWrapperModifier(action: action))
