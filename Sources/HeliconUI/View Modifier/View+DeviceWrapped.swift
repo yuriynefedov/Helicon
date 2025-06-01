@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DeviceFrame<Content: View>: View {
+struct DeviceWrapper<Content: View>: View {
     let content: () -> Content
     
     var body: some View {
@@ -47,20 +47,25 @@ struct DeviceFrame<Content: View>: View {
 struct DeviceWrappedModifier: ViewModifier {
     
     func body(content: Content) -> some View {
-        DeviceFrame {
+        DeviceWrapper {
             content
         }
     }
 }
 
 public extension View {
-    func deviceWrapped() -> some View {
+    func deviceWrapped(_ frame: DeviceFrame) -> some View {
         self.modifier(DeviceWrappedModifier())
     }
 }
 
+public enum DeviceFrame {
+    case userDevice
+    case iPhone16Pro
+}
+
 #Preview {
-    DeviceFrame {
+    DeviceWrapper {
         Color.blue.opacity(0.5)
     }
 }
