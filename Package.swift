@@ -30,7 +30,7 @@ let package = Package(
             name: "HeliconUI",
             dependencies: ["HeliconFoundation"],
             resources: [
-                .process("Assets.xcassets")
+                .process("Resources/Assets.xcassets")
             ]
         ),
         .target(

@@ -1,5 +1,5 @@
 //
-//  View+ButtonWrapper.swift
+//  View+ButtonWrapped.swift
 //  Helicon Widgets
 //
 //  Created by Yuriy Nefedov on 22.01.2025.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ButtonWrapperModifier: ViewModifier {
+struct ButtonWrappedModifier: ViewModifier {
     
     var action: (() -> Void)
     
@@ -20,7 +20,7 @@ struct ButtonWrapperModifier: ViewModifier {
 
 public extension View {
     
-    func buttonWrapper(action: @escaping (() -> Void)) -> some View {
-        self.modifier(ButtonWrapperModifier(action: action))
+    func buttonWrapped(action: @escaping (() -> Void)) -> some View {
+        self.modifier(ButtonWrappedModifier(action: action))
     }
 }
