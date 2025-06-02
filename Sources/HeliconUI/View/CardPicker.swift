@@ -89,7 +89,7 @@ public struct CardPicker<Content: View, T: Identifiable & Equatable & TitleRepre
     private var pickerContent: some View {
         ForEach(options) { option in
             view(for: option)
-                .buttonWrapper {
+                .buttonWrapped {
                     withAnimation {
                         if selection == option {
                             if let onDoubleSelect {
