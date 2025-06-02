@@ -41,6 +41,7 @@ struct DeviceWrapper<Content: View>: View {
         Image.package(named: "Frame.iPhone16Pro.DesertTitanium")
             .resizable()
             .scaledToFit()
+            .allowsHitTesting(false)
     }
 }
 
