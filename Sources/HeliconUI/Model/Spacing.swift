@@ -1,0 +1,86 @@
+//
+//  File.swift
+//  Helicon
+//
+//  Created by Yuriy Nefedov on 13.06.2025.
+//
+
+#if canImport(SwiftUI)
+import SwiftUI
+#endif
+#if canImport(UIKit)
+import UIKit
+#endif
+
+// MARK: - Spacing (8-pt grid)
+
+/// A collection of recommended spacing values.
+public enum Spacing {
+
+    /// Base unit that matches Apple’s “system spacing” (8 pt).
+    private static let base: CGFloat = 8
+
+    /// Any multiple of the base unit. Example: `Spacing.system(3) == 24`.
+    public static func system(_ multiplier: Int = 1) -> Self {
+        .custom(CGFloat(multiplier) * base)
+    }
+
+    case small
+    case medium
+    case large
+    case extraLarge
+    
+    /// Minimum gap between tappable controls.
+    case controlsMinimum
+    
+    case custom(CGFloat)
+    
+    fileprivate var value: CGFloat {
+        switch self {
+        case .small: Self.base
+        case .medium: Self.base * 2
+        case .large: Self.base * 3
+        case .extraLarge: Self.base * 4
+        case .controlsMinimum: Self.base * 1.5
+        case .custom(let cgFloat): cgFloat
+        }
+    }
+    
+}
+
+// MARK: - Padding / Margins
+
+/// A collection of recommended padding values.
+public enum Padding {
+    // Horizontal screen margins
+    case horizontalScreenMargin   // iPhone (compact width)
+    
+    fileprivate var value: CGFloat {
+        switch self {
+        case .horizontalScreenMargin: 16
+        }
+    }
+}
+
+public extension CGSize {
+    // Minimum hit-target size for any interactive element
+    static let minimumHitTargetSize: Self = .init(width: 44, height: 44)
+}
+
+public extension View {
+    func padding(_ edges: Edge.Set, _ padding: Padding) -> some View {
+        self.body.padding(edges, padding.value)
+    }
+}
+
+public extension VStack {
+    init(alignment: HorizontalAlignment, spacing: Spacing?, content: @escaping () -> Content) {
+        self.init(alignment: alignment, spacing: spacing?.value, content: content)
+    }
+}
+
+public extension HStack {
+    init(alignment: VerticalAlignment, spacing: Spacing?, content: @escaping () -> Content) {
+        self.init(alignment: alignment, spacing: spacing?.value, content: content)
+    }
+}
