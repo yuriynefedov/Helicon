@@ -29,4 +29,8 @@ public extension View {
     func padding(_ padding: Padding) -> some View {
         self.body.padding(.all, padding.value)
     }
+    
+    func standardScreenMargin() -> some View {
+        self.body.padding(.horizontal, .horizontalScreenMargin)
+    }
 }
