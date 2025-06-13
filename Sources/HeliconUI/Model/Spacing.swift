@@ -5,12 +5,7 @@
 //  Created by Yuriy Nefedov on 13.06.2025.
 //
 
-#if canImport(SwiftUI)
 import SwiftUI
-#endif
-#if canImport(UIKit)
-import UIKit
-#endif
 
 // MARK: - Spacing (8-pt grid)
 
@@ -49,13 +44,13 @@ public enum Spacing {
 }
 
 public extension VStack {
-    init(alignment: HorizontalAlignment = .center, spacing: Spacing?, content: @escaping () -> Content) {
+    init(alignment: HorizontalAlignment = .center, spacing: Spacing?, @ViewBuilder content: () -> Content) {
         self.init(alignment: alignment, spacing: spacing?.value, content: content)
     }
 }
 
 public extension HStack {
-    init(alignment: VerticalAlignment = .center, spacing: Spacing?, content: @escaping () -> Content) {
+    init(alignment: VerticalAlignment = .center, spacing: Spacing?, @ViewBuilder content: () -> Content) {
         self.init(alignment: alignment, spacing: spacing?.value, content: content)
     }
 }
