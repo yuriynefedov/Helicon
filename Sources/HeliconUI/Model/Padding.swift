@@ -22,7 +22,7 @@ public enum Padding {
 }
 
 public extension View {
-    func padding(_ edges: Edge.Set, _ padding: Padding) -> some View {
+    func padding(_ edges: Edge.Set = .all, _ padding: Padding) -> some View {
         self.body.padding(edges, padding.value)
     }
 }
