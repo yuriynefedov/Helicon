@@ -48,39 +48,14 @@ public enum Spacing {
     
 }
 
-// MARK: - Padding / Margins
-
-/// A collection of recommended padding values.
-public enum Padding {
-    // Horizontal screen margins
-    case horizontalScreenMargin   // iPhone (compact width)
-    
-    fileprivate var value: CGFloat {
-        switch self {
-        case .horizontalScreenMargin: 16
-        }
-    }
-}
-
-public extension CGSize {
-    // Minimum hit-target size for any interactive element
-    static let minimumHitTargetSize: Self = .init(width: 44, height: 44)
-}
-
-public extension View {
-    func padding(_ edges: Edge.Set, _ padding: Padding) -> some View {
-        self.body.padding(edges, padding.value)
-    }
-}
-
 public extension VStack {
-    init(alignment: HorizontalAlignment, spacing: Spacing?, content: @escaping () -> Content) {
+    init(alignment: HorizontalAlignment = .center, spacing: Spacing?, content: @escaping () -> Content) {
         self.init(alignment: alignment, spacing: spacing?.value, content: content)
     }
 }
 
 public extension HStack {
-    init(alignment: VerticalAlignment, spacing: Spacing?, content: @escaping () -> Content) {
+    init(alignment: VerticalAlignment = .center, spacing: Spacing?, content: @escaping () -> Content) {
         self.init(alignment: alignment, spacing: spacing?.value, content: content)
     }
 }
