@@ -23,14 +23,14 @@ public enum Padding {
 
 public extension View {
     func padding(_ edges: Edge.Set, _ padding: Padding) -> some View {
-        self.body.padding(edges, padding.value)
+        self.padding(edges, padding.value)
     }
     
     func padding(_ padding: Padding) -> some View {
-        self.body.padding(.all, padding.value)
+        self.padding(.all, padding.value)
     }
     
     func standardScreenMargin() -> some View {
-        self.body.padding(.horizontal, .horizontalScreenMargin)
+        self.padding(.horizontal, .horizontalScreenMargin)
     }
 }
