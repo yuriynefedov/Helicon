@@ -24,6 +24,7 @@ public struct CardPicker<Content: View, T: Identifiable & Equatable & TitleRepre
     var fontWeight: Font.Weight
     var selectedFontWeight: Font.Weight
     var labelPadding: CGFloat
+    var hideLabels: Bool
     
     let content: (T) -> Content
     var onDoubleSelect: (() -> Void)?
@@ -44,6 +45,7 @@ public struct CardPicker<Content: View, T: Identifiable & Equatable & TitleRepre
         fontWeight: Font.Weight = .medium,
         selectedFontWeight: Font.Weight = .medium,
         labelPadding: CGFloat = 12,
+        hideLabels: Bool = false,
         content: @escaping (T) -> Content,
         onDoubleSelect: (() -> Void)? = nil
     ) {
@@ -109,7 +111,9 @@ public struct CardPicker<Content: View, T: Identifiable & Equatable & TitleRepre
     private func view(for option: T) -> some View {
         VStack(spacing: labelPadding) {
             card(for: option)
-            label(for: option)
+            if !hideLabels {
+                label(for: option)
+            }
         }
     }
     
