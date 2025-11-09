@@ -62,6 +62,7 @@ public struct CardPicker<Content: View, T: Identifiable & Equatable & TitleRepre
         self.fontWeight = fontWeight
         self.selectedFontWeight = selectedFontWeight
         self.labelPadding = labelPadding
+        self.hideLabels = hideLabels
         self.content = content
         self.onDoubleSelect = onDoubleSelect
     }
