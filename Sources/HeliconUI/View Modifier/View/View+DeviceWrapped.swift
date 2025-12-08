@@ -8,17 +8,24 @@
 import SwiftUI
 
 struct DeviceWrapper<Content: View>: View {
+    
+    let frame: DeviceFrame
     let content: () -> Content
+    
+    init(_ frame: DeviceFrame, content: @escaping () -> Content) {
+        self.frame = frame
+        self.content = content
+    }
     
     var body: some View {
         GeometryReader { proxy in
             
-            let frameAspectRatio: CGFloat = 0.483
+            let frameAspectRatio: CGFloat = frame.frameAspectRatio
             let inferredFrameWidth: CGFloat = min(proxy.size.width, proxy.size.height * frameAspectRatio)
             
-            let inferredCornerRadius: CGFloat = inferredFrameWidth / 7
-            let inferedBezzleWidth: CGFloat = inferredFrameWidth / 26
-            let inferedBezzleHeight: CGFloat = inferredFrameWidth / 30
+            let inferredCornerRadius: CGFloat = inferredFrameWidth * frame.cornerRadiusToFrameWidthRatio
+            let inferedBezzleWidth: CGFloat = inferredFrameWidth * frame.bezzleWidthToFrameWidthRatio
+            let inferedBezzleHeight: CGFloat = inferredFrameWidth * frame.bezzleHeightToFrameWidthRatio
             
             ZStack {
                 deviceFrame
@@ -38,7 +45,7 @@ struct DeviceWrapper<Content: View>: View {
     }
     
     private var deviceFrame: some View {
-        Image.package(named: "Frame.iPhone16Pro.DesertTitanium")
+        Image.package(named: frame.imageName)
             .resizable()
             .scaledToFit()
             .allowsHitTesting(false)
@@ -47,26 +54,63 @@ struct DeviceWrapper<Content: View>: View {
 
 struct DeviceWrappedModifier: ViewModifier {
     
+    let frame: DeviceFrame
+    
     func body(content: Content) -> some View {
-        DeviceWrapper {
+        DeviceWrapper(frame) {
             content
         }
     }
 }
 
 public extension View {
-    func deviceWrapped(_ frame: DeviceFrame) -> some View {
-        self.modifier(DeviceWrappedModifier())
+    func deviceWrapped(_ frame: DeviceFrame = .iPhone16Pro) -> some View {
+        self.modifier(DeviceWrappedModifier(frame: frame))
     }
 }
 
-public enum DeviceFrame {
-    case userDevice
+public enum DeviceFrame : Sendable {
     case iPhone16Pro
+    case appleWatchUltra
+        
+    var imageName: String {
+        switch self {
+        case .iPhone16Pro: "Frame.iPhone16Pro.DesertTitanium"
+        case .appleWatchUltra: "Frame.AppleWatchUltra.YellowBeigeTrailLoop"
+        }
+    }
+    
+    var frameAspectRatio: CGFloat {
+        switch self {
+        case .iPhone16Pro: 0.483
+        case .appleWatchUltra: 0.483
+        }
+    }
+    
+    var cornerRadiusToFrameWidthRatio: CGFloat {
+        switch self {
+        case .iPhone16Pro: 1/7
+        case .appleWatchUltra: 1/7
+        }
+    }
+    
+    var bezzleWidthToFrameWidthRatio: CGFloat {
+        switch self {
+        case .iPhone16Pro: 1/26
+        case .appleWatchUltra: 1/6.2
+        }
+    }
+    
+    var bezzleHeightToFrameWidthRatio: CGFloat {
+        switch self {
+        case .iPhone16Pro: 1/30
+        case .appleWatchUltra: 1/2.8
+        }
+    }
 }
 
 #Preview {
-    DeviceWrapper {
-        Color.blue.opacity(0.5)
-    }
+    Color.blue.opacity(0.5)
+        .deviceWrapped(.appleWatchUltra)
+        .padding(0)
 }
